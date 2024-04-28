@@ -1,0 +1,11 @@
+build
+out
+bin
+build-*
+
+.git
+.vs
+.vscode
+*.user
+.DS_Store
+.autosave
