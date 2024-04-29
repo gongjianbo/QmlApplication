@@ -10,10 +10,10 @@ Item {
 
     // 窗口工具类，Window内共享一个tool
     required property BasicWindowTool windowTool
-    // 需绑定target，required不能初始化dumpinfo失败
+    // 需绑定target，属性绑定外部window id会循环引用
     property Window target: Window.window
-    property int minWidth: target.minimumWidth
-    property int minHeight: target.minimumHeight
+    property int minWidth: 0
+    property int minHeight: 0
     // 缩放拖动区域
     property int handleWidth: 5
     property int handleZ: 100
@@ -36,51 +36,51 @@ Item {
         enabled: !isMax
         // 左上
         MouseArea {
-            width: handleWidth*2
-            height: handleWidth*2
+            width: handleWidth * 2
+            height: handleWidth * 2
             z: 1
             cursorShape: Qt.SizeFDiagCursor
             // Rectangle{ anchors.fill: parent; color: "blue" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(true,false,true,false,mouse);
+            onPositionChanged: doResize(true, false, true, false, mouse);
         }
         // 右上
         MouseArea {
             anchors.right: parent.right
-            width: handleWidth*2
-            height: handleWidth*2
+            width: handleWidth * 2
+            height: handleWidth * 2
             z: 1
             cursorShape: Qt.SizeBDiagCursor
             // Rectangle{ anchors.fill: parent; color: "blue" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(true,false,false,true,mouse);
+            onPositionChanged: doResize(true, false, false, true, mouse);
         }
         // 左下
         MouseArea {
             anchors.bottom: parent.bottom
-            width: handleWidth*2
-            height: handleWidth*2
+            width: handleWidth * 2
+            height: handleWidth * 2
             z: 1
             cursorShape: Qt.SizeBDiagCursor
             // Rectangle{ anchors.fill: parent; color: "blue" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(false,true,true,false,mouse);
+            onPositionChanged: doResize(false, true, true, false, mouse);
         }
         // 右下
         MouseArea {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            width: handleWidth*2
-            height: handleWidth*2
+            width: handleWidth * 2
+            height: handleWidth * 2
             z: 1
             cursorShape: Qt.SizeFDiagCursor
             // Rectangle{ anchors.fill: parent; color: "blue" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(false,true,false,true,mouse);
+            onPositionChanged: doResize(false, true, false, true, mouse);
         }
         // 上
         MouseArea {
@@ -88,9 +88,9 @@ Item {
             height: handleWidth
             cursorShape: Qt.SizeVerCursor
             // Rectangle{ anchors.fill: parent; color: "green" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(true,false,false,false,mouse);
+            onPositionChanged: doResize(true, false, false, false, mouse);
         }
         // 下
         MouseArea {
@@ -99,9 +99,9 @@ Item {
             height: handleWidth
             cursorShape: Qt.SizeVerCursor
             // Rectangle{ anchors.fill: parent; color: "green" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(false,true,false,false,mouse);
+            onPositionChanged: doResize(false, true, false, false, mouse);
         }
         // 左
         MouseArea {
@@ -109,9 +109,9 @@ Item {
             height: target.height
             cursorShape: Qt.SizeHorCursor
             // Rectangle{ anchors.fill: parent; color: "green" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(false,false,true,false,mouse);
+            onPositionChanged: doResize(false, false, true, false, mouse);
         }
         // 右
         MouseArea {
@@ -120,29 +120,29 @@ Item {
             height: target.height
             cursorShape: Qt.SizeHorCursor
             // Rectangle{ anchors.fill: parent; color: "green" }
-            onPressed: beginResize(mouse,cursorShape);
+            onPressed: beginResize(mouse, cursorShape);
             onReleased: endResize();
-            onPositionChanged: doResize(false,false,false,true,mouse);
+            onPositionChanged: doResize(false, false, false, true, mouse);
         }
     }
 
-    function beginResize(mouse,shape){
-        if(!windowTool)
+    function beginResize(mouse, shape) {
+        if (!windowTool)
             return;
         // window rect
-        tempRect = Qt.rect(target.x,target.y,target.width,target.height);
+        tempRect = Qt.rect(target.x, target.y, target.width, target.height);
         calcRect = tempRect;
         // mouse offset
         tempGlobalPos = windowTool.pos();
-        tempOffsetPos = Qt.point(mouse.x-tempGlobalPos.x,
-                                 mouse.y-tempGlobalPos.y);
+        tempOffsetPos = Qt.point(mouse.x - tempGlobalPos.x,
+                                 mouse.y - tempGlobalPos.y);
         onResize = true;
         // 设置鼠标形状，防止移动到item外部后变形
         windowTool.setOverrideCursor(shape);
     }
 
     function endResize(){
-        if(!windowTool)
+        if (!windowTool)
             return;
         onResize = false;
         windowTool.restoreOverrideCursor();
@@ -150,31 +150,31 @@ Item {
 
     // m-上下左右为bool参数，表示在哪个边移动
     // mouse为MouseEvent
-    function doResize(mtop,mbottom,mleft,mright,mouse){
-        if(!onResize || !windowTool)
+    function doResize(mtop, mbottom, mleft, mright, mouse){
+        if (!onResize || !windowTool)
             return;
 
         tempGlobalPos = windowTool.pos();
-        if(mtop){
-            calcRect.y = tempRect.y+tempGlobalPos.y+tempOffsetPos.y;
-            if(calcRect.y > tempRect.y+tempRect.height-minHeight)
-                calcRect.y = tempRect.y+tempRect.height-minHeight;
-            calcRect.height = tempRect.y+tempRect.height-calcRect.y;
-        }else if(mbottom){
-            calcRect.height = tempRect.height+tempGlobalPos.y+tempOffsetPos.y;
+        if (mtop) {
+            calcRect.y = tempRect.y + tempGlobalPos.y + tempOffsetPos.y;
+            if(calcRect.y > tempRect.y + tempRect.height - minHeight)
+                calcRect.y = tempRect.y + tempRect.height - minHeight;
+            calcRect.height = tempRect.y + tempRect.height - calcRect.y;
+        } else if (mbottom) {
+            calcRect.height = tempRect.height + tempGlobalPos.y + tempOffsetPos.y;
             if(calcRect.height < minHeight)
                 calcRect.height = minHeight;
         }
 
-        if(mleft){
-            calcRect.x = tempRect.x+tempGlobalPos.x+tempOffsetPos.x;
-            if(calcRect.x > tempRect.x+tempRect.width-minWidth)
-                calcRect.x = tempRect.x+tempRect.width-minWidth;
-            calcRect.width = tempRect.x+tempRect.width-calcRect.x;
-        }else if(mright){
-            calcRect.width = tempRect.width+tempGlobalPos.x+tempOffsetPos.x;
-            if(calcRect.width < minWidth)
-                calcRect.width = minWidth;
+        if (mleft) {
+            calcRect.x = tempRect.x + tempGlobalPos.x + tempOffsetPos.x;
+            if(calcRect.x > tempRect.x + tempRect.width - qDpi(minWidth))
+                calcRect.x = tempRect.x + tempRect.width - qDpi(minWidth);
+            calcRect.width = tempRect.x + tempRect.width - calcRect.x;
+        } else if (mright) {
+            calcRect.width = tempRect.width+tempGlobalPos.x + tempOffsetPos.x;
+            if (calcRect.width < qDpi(minWidth))
+                calcRect.width = qDpi(minWidth);
         }
         target.setGeometry(calcRect);
     }

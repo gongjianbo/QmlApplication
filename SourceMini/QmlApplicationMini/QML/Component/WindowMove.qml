@@ -10,7 +10,7 @@ Item {
 
     // 窗口工具类，Window内共享一个tool
     required property BasicWindowTool windowTool
-    // 需绑定target，required不能初始化dumpinfo失败
+    // 需绑定target，属性绑定外部window id会循环引用
     property Window target: Window.window
     // 拖到顶部放大
     property bool autoMax: true
@@ -32,21 +32,21 @@ Item {
         z: -1
         anchors.fill: parent
         onPressed: {
-            if(isMax && !autoMax || !windowTool)
+            if (isMax && !autoMax || !windowTool)
                 return;
 
             // mouse offset
             tempGlobalPos = windowTool.pos();
-            tempOffsetPos = Qt.point(target.x-tempGlobalPos.x,
-                                     target.y-tempGlobalPos.y);
+            tempOffsetPos = Qt.point(target.x - tempGlobalPos.x,
+                                     target.y - tempGlobalPos.y);
             onMove = true;
         }
         onReleased: {
-            if(onMove && autoMax){
+            if (onMove && autoMax) {
                 // 拖到顶上最大化
-                tempTopSpace = target.y-target.screen.virtualY+shadowWidth;
+                tempTopSpace = target.y - target.screen.virtualY + shadowWidth;
                 // 给定一个区间，支持竖向多屏
-                if(tempTopSpace<-1 && tempTopSpace>-control.height){
+                if (tempTopSpace <- 1 && tempTopSpace >- control.height) {
                     target.y = target.screen.virtualY;
                     windowTool.showMax();
                 }
@@ -54,35 +54,35 @@ Item {
             onMove = false;
         }
         onPositionChanged: {
-            if(!onMove || !windowTool)
+            if (!onMove || !windowTool)
                 return;
 
-            if(isMax && autoMax){
+            if (isMax && autoMax) {
                 // 最大化时拖动恢复为普通状态
                 let max_wdith = target.width;
                 windowTool.showNormal();
                 let normal_width = target.width;
                 // 放大缩小时mouse.x位置比例
-                let normal_x = mouse.x/max_wdith*normal_width;
-                // console.log(tempOffsetPos.x,tempGlobalPos.x,normal_x)
+                let normal_x = mouse.x / max_wdith * normal_width;
+                // console.log(tempOffsetPos.x, tempGlobalPos.x, normal_x)
                 // 默认作为标题栏，宽度同window宽度==来计算
                 tempOffsetPos.x = -normal_x;
                 tempOffsetPos.y -= shadowWidth;
             }
             tempGlobalPos = windowTool.pos();
-            target.x = tempGlobalPos.x+tempOffsetPos.x;
-            target.y = tempGlobalPos.y+tempOffsetPos.y;
+            target.x = tempGlobalPos.x + tempOffsetPos.x;
+            target.y = tempGlobalPos.y + tempOffsetPos.y;
         }
         onDoubleClicked: {
             // 避免触发移动
             onMove = false;
-            if(!autoMax)
+            if (!autoMax)
                 return;
 
             // 双击放大缩小
-            if(isMax){
+            if (isMax) {
                 windowTool.showNormal();
-            }else{
+            } else {
                 windowTool.showMax();
             }
         }

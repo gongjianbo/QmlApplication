@@ -1,5 +1,6 @@
 #include "BasicWindowTool.h"
 #include <QGuiApplication>
+#include <QOperatingSystemVersion>
 #include <QScreen>
 #include <QMouseEvent>
 #include <QQuickItem>
@@ -31,8 +32,8 @@ void BasicWindowTool::setWindow(QQuickWindow *win)
         window->disconnect(this);
         window->removeEventFilter(this);
     }
-    frameless = false;
     window = win;
+    frameless = false;
     if (window) {
         frameless = !!(window->flags() & Qt::FramelessWindowHint);
         connect(window, &QWindow::windowStateChanged, this, &BasicWindowTool::onWindowStateChange, Qt::QueuedConnection);
@@ -168,6 +169,17 @@ qreal BasicWindowTool::windowDevicePixelRatio(QWindow *win)
     return 1.0;
 }
 
+bool BasicWindowTool::enableTransparent()
+{
+#if defined(Q_OS_WIN32)
+    if (QOperatingSystemVersion::current().majorVersion() <= 7) {
+        // win7 可能不能正常显示透明
+        return false;
+    }
+#endif
+    return true;
+}
+
 QPoint BasicWindowTool::pos()
 {
     return QCursor::pos();
@@ -207,38 +219,46 @@ bool BasicWindowTool::eventFilter(QObject *watched, QEvent *event)
 
 void BasicWindowTool::classBegin()
 {
-    QQuickWindow *win = qobject_cast<QQuickWindow *>(parent());
-    qDebug()<<__FUNCTION__<<(win->flags() & Qt::FramelessWindowHint)<<win->geometry();
-    // 这时候获取的窗口是 BasicWindow 的信息，不先设置宽高会导致 show 没居中
-    /*if (win && win->winId()) {
-        qDebug()<<__FUNCTION__<<(win->flags() & Qt::FramelessWindowHint)<<win->geometry();
-
-        setWindow(win);
+    return;
+    auto obj = parent();
+    while (obj)
+    {
+        if (auto win = qobject_cast<QQuickWindow *>(obj))
+        {
+            // 此时窗口还没完成初始化，没法获取完整属性
+            // 默认 show 之后才更新 screen，提前 create 更新 screen
+            // 但是因为属性还没初始化，create 后窗口默认按 120 初始化，导致 show 时没居中
+            // 所以 show 时重置下 rect
+            win->create();
+            setWindow(win);
+            break;
+        }
+        obj = obj->parent();
     }
-    qDebug()<<__FUNCTION__<<(!!win)<<win<<win->width()<<win->property("width");*/
 }
 
 void BasicWindowTool::componentComplete()
 {
-    qDebug()<<__FUNCTION__;
-    auto obj = parent();
-    while (obj)
-    {
-        qDebug()<<obj;
-        if (obj->inherits("QQuickRootItem"))
-        {
-            if (auto rootItem = qobject_cast<QQuickItem *>(obj))
-            {
-                if (auto window = rootItem->window())
-                {
-                    qDebug()<<window->property("width")<<window->width()<<(window->flags() & Qt::FramelessWindowHint);
-                }
-
-                break;
-            }
-        }
-        obj = obj->parent();
+    if (!window) {
+        return;
     }
+    frameless = !!(window->flags() & Qt::FramelessWindowHint);
+
+    // auto obj = parent();
+    // while (obj)
+    // {
+    //     if (obj->inherits("QQuickRootItem"))
+    //     {
+    //         if (auto root = qobject_cast<QQuickItem *>(obj))
+    //         {
+    //             if (auto win = root->window() && win->screen())
+    //             {
+    //             }
+    //             break;
+    //         }
+    //     }
+    //     obj = obj->parent();
+    // }
 }
 
 void BasicWindowTool::onScreenChange(QScreen *screen)

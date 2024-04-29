@@ -1,7 +1,23 @@
 <RCC>
     <qresource prefix="/">
-        <file>Image/icon.png</file>
-        <file>Image/icon.svg</file>
         <file>Image/icon.ico</file>
+        <file>Image/Component/close.svg</file>
+        <file>Image/Component/icon.png</file>
+        <file>Image/Component/icon.svg</file>
+        <file>Image/Component/max.svg</file>
+        <file>Image/Component/min.svg</file>
+        <file>Image/Component/normal.svg</file>
+        <file>Image/Main/douyin.png</file>
+        <file>Image/Main/douyin.svg</file>
+        <file>Image/Main/douyin@2x.png</file>
+        <file>Image/Main/kuaishou.png</file>
+        <file>Image/Main/kuaishou.svg</file>
+        <file>Image/Main/kuaishou@2x.png</file>
+        <file>Image/Main/wangluo.png</file>
+        <file>Image/Main/wangluo.svg</file>
+        <file>Image/Main/wangluo@2x.png</file>
+        <file>Image/Main/wangyiyun.png</file>
+        <file>Image/Main/wangyiyun.svg</file>
+        <file>Image/Main/wangyiyun@2x.png</file>
     </qresource>
 </RCC>

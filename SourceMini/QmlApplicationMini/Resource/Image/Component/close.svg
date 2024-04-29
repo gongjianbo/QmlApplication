@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>close</title>
+    <g id="page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="window" transform="translate(-1880.000000, -12.000000)">
+            <g id="top" transform="translate(10.000000, 6.000000)">
+                <g id="close_path" transform="translate(1878.000000, 14.000000) rotate(-270.000000) translate(-1878.000000, -14.000000) translate(1870.000000, 6.000000)">
+                    <polygon id="path" points="0 0 16 0 16 16 0 16"></polygon>
+                    <path d="M2.48695862,1.06641261 L8,6.58369493 L13.520039,1.06827808 C14.2089736,1.25328619 14.7510091,1.7970324 14.9335874,2.48695862 L9.41500425,8 L14.9317219,13.520039 C14.7468032,14.2086407 14.2034931,14.7504851 13.5140417,14.9333224 L8,9.41543698 L2.47996101,14.9317219 C1.79135934,14.7468032 1.24951485,14.2034931 1.0666776,13.5140417 L6.58463836,8 L1.06827808,2.47996101 C1.25328619,1.79102636 1.7970324,1.24899086 2.48695862,1.06641261 Z" id="close" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

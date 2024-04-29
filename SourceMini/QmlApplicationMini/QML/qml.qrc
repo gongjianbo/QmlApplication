@@ -1,10 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>MainWindow.qml</file>
-        <file>WindowManager.qml</file>
-        <file>BasicWindow.qml</file>
-        <file>WindowMove.qml</file>
-        <file>WindowResize.qml</file>
+        <file>Component/BasicWindow.qml</file>
+        <file>Component/WindowMove.qml</file>
+        <file>Component/WindowResize.qml</file>
+        <file>Main/MainWindow.qml</file>
+        <file>Main/WindowManager.qml</file>
+        <file>Main/PageText.qml</file>
+        <file>Main/PageImage.qml</file>
+        <file>Main/PageOther.qml</file>
+        <file>Main/PageLayout.qml</file>
+        <file>Main/ItemTag.qml</file>
     </qresource>
 </RCC>

@@ -38,6 +38,8 @@ public:
 
     // 计算窗口所在屏幕缩放比
     Q_INVOKABLE static qreal windowDevicePixelRatio(QWindow *win);
+    // 是否支持透明背景，如 win7 可能不能正常显示透明窗口
+    Q_INVOKABLE static bool enableTransparent();
 
     // 鼠标光标全局位置 QCursor::pos
     Q_INVOKABLE static QPoint pos();

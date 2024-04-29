@@ -1,6 +1,8 @@
 #include <QApplication>
+#include <QOperatingSystemVersion>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include <QFont>
 #include <QDebug>
 #include "ComponentRegister.h"
 
@@ -8,10 +10,14 @@ int main(int argc, char *argv[])
 {
     qputenv("QML2_IMPORT_PATH", "");
 #if defined(Q_OS_WIN32)
-    // ES在低配置设备渲染问题比Desktop少一点
+    if (QOperatingSystemVersion::current().majorVersion() <= 7) {
+        // 部分 Win7 ES 渲染有问题
+        qputenv("QT_ANGLE_PLATFORM", "d3d9");
+    }
+    // ES 在低配置设备渲染问题比 Desktop 少一点
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
 #endif
-    // 关闭Qt缩放，手动给组件乘上缩放比例
+    // 关闭 Qt 缩放，手动给组件乘上缩放比例
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 #else
@@ -30,6 +36,11 @@ int main(int argc, char *argv[])
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
     QApplication app(argc, argv);
+
+    // 设置全局字体
+    QFont font = app.font();
+    font.setFamily("Microsoft YaHei");
+    app.setFont(font);
 
     QQmlApplicationEngine engine;
 
