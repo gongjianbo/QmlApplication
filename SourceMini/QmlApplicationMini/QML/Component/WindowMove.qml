@@ -15,8 +15,6 @@ Item {
     // 拖到顶部放大
     property bool autoMax: true
     property bool onMove: false
-    property bool isMax: (target.visibility === Window.Maximized||
-                          target.visibility === Window.FullScreen)
 
     // 鼠标屏幕坐标
     property point tempGlobalPos
@@ -24,15 +22,13 @@ Item {
     property point tempOffsetPos
     // 距离顶部px
     property int tempTopSpace
-    // 无边框阴影区域宽度
-    property int shadowWidth: 0
 
     // Rectangle{ anchors.fill: parent; color: "orange"; }
     MouseArea {
         z: -1
         anchors.fill: parent
         onPressed: {
-            if (isMax && !autoMax || !windowTool)
+            if (target.isMax && !autoMax || !windowTool)
                 return;
 
             // mouse offset
@@ -44,7 +40,7 @@ Item {
         onReleased: {
             if (onMove && autoMax) {
                 // 拖到顶上最大化
-                tempTopSpace = target.y - target.screen.virtualY + shadowWidth;
+                tempTopSpace = target.y - target.screen.virtualY + target.shadowWidth;
                 // 给定一个区间，支持竖向多屏
                 if (tempTopSpace <- 1 && tempTopSpace >- control.height) {
                     target.y = target.screen.virtualY;
@@ -57,7 +53,7 @@ Item {
             if (!onMove || !windowTool)
                 return;
 
-            if (isMax && autoMax) {
+            if (target.isMax && autoMax) {
                 // 最大化时拖动恢复为普通状态
                 let max_wdith = target.width;
                 windowTool.showNormal();
@@ -67,7 +63,7 @@ Item {
                 // console.log(tempOffsetPos.x, tempGlobalPos.x, normal_x)
                 // 默认作为标题栏，宽度同window宽度==来计算
                 tempOffsetPos.x = -normal_x;
-                tempOffsetPos.y -= shadowWidth;
+                tempOffsetPos.y -= target.shadowWidth;
             }
             tempGlobalPos = windowTool.pos();
             target.x = tempGlobalPos.x + tempOffsetPos.x;
@@ -80,7 +76,7 @@ Item {
                 return;
 
             // 双击放大缩小
-            if (isMax) {
+            if (target.isMax) {
                 windowTool.showNormal();
             } else {
                 windowTool.showMax();

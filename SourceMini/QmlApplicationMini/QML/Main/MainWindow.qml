@@ -12,10 +12,10 @@ BasicWindow {
 
     windowType: Qt.Window
     modality: Qt.ApplicationModal
-    initWidth: 800
-    initHeight: 600
-    minWidth: 400
-    minHeight: 300
+    refWidth: 800
+    refHeight: 600
+    refMinWidth: 400
+    refMinHeight: 300
     autoSize: true
     visible: false
     title: String(qsTr("Qml Application Mini (%1%)")).arg((windowTool.devicePixelRatio * 100).toFixed(0))

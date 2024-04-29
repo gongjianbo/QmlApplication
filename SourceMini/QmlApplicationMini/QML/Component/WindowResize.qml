@@ -12,14 +12,10 @@ Item {
     required property BasicWindowTool windowTool
     // 需绑定target，属性绑定外部window id会循环引用
     property Window target: Window.window
-    property int minWidth: 0
-    property int minHeight: 0
     // 缩放拖动区域
     property int handleWidth: 5
     property int handleZ: 100
     property bool onResize: false
-    property bool isMax: (target.visibility === Window.Maximized||
-                          target.visibility === Window.FullScreen)
 
     // press时记录原geometry
     property rect tempRect
@@ -33,7 +29,7 @@ Item {
     Item {
         z: handleZ
         anchors.fill: parent
-        enabled: !isMax
+        enabled: !target.isMax
         // 左上
         MouseArea {
             width: handleWidth * 2
@@ -157,24 +153,24 @@ Item {
         tempGlobalPos = windowTool.pos();
         if (mtop) {
             calcRect.y = tempRect.y + tempGlobalPos.y + tempOffsetPos.y;
-            if(calcRect.y > tempRect.y + tempRect.height - minHeight)
-                calcRect.y = tempRect.y + tempRect.height - minHeight;
+            if(calcRect.y > tempRect.y + tempRect.height - qDpi(target.refMinHeight))
+                calcRect.y = tempRect.y + tempRect.height - qDpi(target.refMinHeight);
             calcRect.height = tempRect.y + tempRect.height - calcRect.y;
         } else if (mbottom) {
             calcRect.height = tempRect.height + tempGlobalPos.y + tempOffsetPos.y;
-            if(calcRect.height < minHeight)
-                calcRect.height = minHeight;
+            if(calcRect.height < qDpi(target.refMinHeight))
+                calcRect.height = qDpi(target.refMinHeight);
         }
 
         if (mleft) {
             calcRect.x = tempRect.x + tempGlobalPos.x + tempOffsetPos.x;
-            if(calcRect.x > tempRect.x + tempRect.width - qDpi(minWidth))
-                calcRect.x = tempRect.x + tempRect.width - qDpi(minWidth);
+            if(calcRect.x > tempRect.x + tempRect.width - qDpi(target.refMinWidth))
+                calcRect.x = tempRect.x + tempRect.width - qDpi(target.refMinWidth);
             calcRect.width = tempRect.x + tempRect.width - calcRect.x;
         } else if (mright) {
             calcRect.width = tempRect.width+tempGlobalPos.x + tempOffsetPos.x;
-            if (calcRect.width < qDpi(minWidth))
-                calcRect.width = qDpi(minWidth);
+            if (calcRect.width < qDpi(target.refMinWidth))
+                calcRect.width = qDpi(target.refMinWidth);
         }
         target.setGeometry(calcRect);
     }

@@ -8,8 +8,8 @@ import Cute.Component 1.0
 
 // 自定义窗口
 // 龚建波 2024-01-02
-// NOTE 注意 BasicWindow 的 initWidth/Height 不要加 qDpi 后设置
-// NOTE 最小宽高通过 minWidth/Height 而不是 minimumWidth/Height
+// NOTE 注意 BasicWindow 的 refWidth/Height 不要加 qDpi 后设置
+// NOTE 最小宽高通过 refMinWidth/Height 而不是 minimumWidth/Height
 // NOTE 因为是套了一层，设置背景色不能用 color，需要设置 bgColor
 // TODO 触碰屏幕边框时的停靠效果需要调用 win32 接口，待完成
 Window {
@@ -25,12 +25,12 @@ Window {
     color: win_tool.enableTransparent() ? "transparent" : "black"
 
     // 宽高单独设置，按未缩放大小设置，因为切换缩放比
-    required property int initWidth
-    required property int initHeight
+    required property int refWidth
+    required property int refHeight
     // 最小宽高，按未缩放大小设置
-    property int minWidth: 0
-    property int minHeight: 0
-    // 宽高是否自适应，如果 =true 则根据 initWidth/Height 与 1920/1080 的比例来自适应窗口大小
+    property int refMinWidth: 0
+    property int refMinHeight: 0
+    // 宽高是否自适应，如果 =true 则根据 refWidth/Height 与 1920/1080 的比例来自适应窗口大小
     property bool autoSize: false
 
     // 可设置为 Window 或者 Dialog，不用每次都设置所有 flags 属性
@@ -39,10 +39,12 @@ Window {
     property bool framless: true
     // Window 默认可拉伸，Dialog 默认不可以
     property bool resizable: (windowType === Qt.Window)
+    // 当前是否最大化
+    property bool isMax: (visibility === Window.Maximized || visibility === Window.FullScreen)
     // 阴影宽度
-    property int shadowWidth: (!framless || win_move.isMax) ? 0 : (win_tool.enableTransparent() ? 12 : 1)
+    property int shadowWidth: (!framless || isMax) ? 0 : (win_tool.enableTransparent() ? 12 : 1)
     // 自定义边框的圆角
-    property int radius: 0 // (!framless || win_move.isMax) ? 0 : 8
+    property int radius: 0 // (!framless || isMax) ? 0 : 8
     // 自定义边框相关接口
     property alias windowTool: win_tool
     // 标题栏
@@ -79,7 +81,7 @@ Window {
         anchors.margins: 1
         radius: control.radius
         color: "black"
-        layer.enabled: win_move.isMax ? false : true
+        layer.enabled: control.isMax ? false : true
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 2
@@ -119,7 +121,6 @@ Window {
                 anchors.fill: parent
                 windowTool: win_tool
                 autoMax: control.resizable
-                shadowWidth: control.shadowWidth
             }
 
             // 左侧 icon + 标题
@@ -166,12 +167,12 @@ Window {
                 TitleButton {
                     id: btn_max
                     visible: control.headerFlags & Qt.WindowMaximizeButtonHint
-                    // text: win_move.isMax ? "Normal" : "Max"
-                    source: win_move.isMax
+                    // text: control.isMax ? "Normal" : "Max"
+                    source: control.isMax
                             ? "qrc:/Image/Component/normal.svg"
                             : "qrc:/Image/Component/max.svg"
                     onClicked: {
-                        if (win_move.isMax) {
+                        if (control.isMax) {
                             win_tool.showNormal();
                         } else {
                             win_tool.showMax();
@@ -196,8 +197,6 @@ Window {
             visible: control.framless && control.resizable
             anchors.fill: parent
             windowTool: win_tool
-            minWidth: qDpi(control.minWidth)
-            minHeight: qDpi(control.minHeight)
         }
     }
 
@@ -238,11 +237,17 @@ Window {
     Component.onCompleted: {
         // 初始化时根据 dpi 重置宽高，阴影额外加宽高
         if (autoSize) {
-            control.width = Math.floor(control.initWidth / 1920 * screen.width) + control.shadowWidth * 2
-            control.height = Math.floor(control.initHeight / 1080 * screen.height) + control.shadowWidth * 2
+            // 更宽则按照高度适应，更高则按照宽度适应
+            if (screen.width / screen.height > 1920 / 1080) {
+                control.width = Math.floor(control.refWidth / 1080 * screen.height) + control.shadowWidth * 2
+                control.height = Math.floor(control.refHeight / 1080 * screen.height) + control.shadowWidth * 2
+            } else {
+                control.width = Math.floor(control.refWidth / 1920 * screen.width) + control.shadowWidth * 2
+                control.height = Math.floor(control.refHeight / 1920 * screen.width) + control.shadowWidth * 2
+            }
         } else {
-            control.width = qDpi(control.initWidth) + control.shadowWidth * 2
-            control.height = qDpi(control.initHeight) + control.shadowWidth * 2
+            control.width = qDpi(control.refWidth) + control.shadowWidth * 2
+            control.height = qDpi(control.refHeight) + control.shadowWidth * 2
         }
     }
 
