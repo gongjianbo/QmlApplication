@@ -28,11 +28,11 @@ Rectangle {
                 console.log("rect", parent.x, parent.y, parent.width, parent.height)
             }
         }
+        ItemTag { index: 1; text: "边框抗锯齿渲染问题" }
     }
-
     Rectangle {
         x: 100.3
-        y: 200.4
+        y: 150.4
         width: 100.5
         height: 30.5
         border.color: "#00A7AE"

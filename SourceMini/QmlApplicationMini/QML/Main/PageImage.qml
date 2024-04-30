@@ -38,17 +38,15 @@ Rectangle {
         }
     }
 
-    // 3.简单封装，在组件内部调用 qDpi
+    // 3.封装 Image
     component MyImage: Image {
         id: my_img
 
-        // 传入未缩放时的尺寸进行计算参考值
-        property int refWidth: 0
-        property int refHeight: 0
-        property alias refSource: img_tool.source
+        property alias mySource: img_tool.source
 
-        width: refWidth > 0 ? qDpi(refWidth) : qDpi(img_tool.implicitWidth)
-        height: refHeight > 0 ? qDpi(refHeight) : qDpi(img_tool.implicitHeight)
+        width: qDpi(img_tool.implicitWidth)
+        height: qDpi(img_tool.implicitHeight)
+        // 缩放时 BasicImageTool 将 .png 转换路径为 @2x.png
         source: img_tool.path
         sourceSize: Qt.size(img_tool.paintedWidth, img_tool.paintedHeight)
 
@@ -65,20 +63,20 @@ Rectangle {
         y: qDpi(50)
         spacing: qDpi(6)
         MyImage {
-            refSource: "qrc:/Image/Main/douyin.svg"
+            mySource: "qrc:/Image/Main/douyin.svg"
             ItemTag { index: 3; text: "封装 Image" }
         }
         MyImage {
-            refSource: "qrc:/Image/Main/douyin.png"
+            mySource: "qrc:/Image/Main/douyin.png"
         }
         MyImage {
-            refWidth: 64
-            refHeight: 64
-            refSource: "qrc:/Image/Main/douyin@2x.png"
+            width: qDpi(64)
+            height: qDpi(64)
+            mySource: "qrc:/Image/Main/douyin@2x.png"
         }
     }
 
-    // 4.C++加载图片需要给宽高乘上缩放比
+    // 4.C++ 加载图片需要给宽高乘上缩放比
     Column {
         x: qDpi(450)
         y: qDpi(50)

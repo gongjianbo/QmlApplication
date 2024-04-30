@@ -12,10 +12,10 @@ BasicWindow {
 
     windowType: Qt.Window
     modality: Qt.ApplicationModal
-    refWidth: 800
-    refHeight: 600
-    refMinWidth: 400
-    refMinHeight: 300
+    initWidth: 800
+    initHeight: 600
+    minWidth: 400
+    minHeight: 300
     autoSize: true
     visible: false
     title: String(qsTr("Qml Application Mini (%1%)")).arg((windowTool.devicePixelRatio * 100).toFixed(0))
@@ -28,9 +28,6 @@ BasicWindow {
         }
         TabButton {
             text: qsTr("图片")
-        }
-        TabButton {
-            text: qsTr("布局")
         }
         TabButton {
             text: qsTr("其他")
@@ -46,9 +43,6 @@ BasicWindow {
         }
         PageImage {
             id: page_image
-        }
-        PageLayout {
-            id: page_layout
         }
         PageOther {
             id: page_other

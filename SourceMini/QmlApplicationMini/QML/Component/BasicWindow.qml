@@ -8,8 +8,8 @@ import Cute.Component 1.0
 
 // 自定义窗口
 // 龚建波 2024-01-02
-// NOTE 注意 BasicWindow 的 refWidth/Height 不要加 qDpi 后设置
-// NOTE 最小宽高通过 refMinWidth/Height 而不是 minimumWidth/Height
+// NOTE 注意 BasicWindow 的 initWidth/Height 不要加 qDpi 后设置
+// NOTE 最小宽高通过 minWidth/Height 而不是 minimumWidth/Height
 // NOTE 因为是套了一层，设置背景色不能用 color，需要设置 bgColor
 // TODO 触碰屏幕边框时的停靠效果需要调用 win32 接口，待完成
 Window {
@@ -25,12 +25,12 @@ Window {
     color: win_tool.enableTransparent() ? "transparent" : "black"
 
     // 宽高单独设置，按未缩放大小设置，因为切换缩放比
-    required property int refWidth
-    required property int refHeight
+    required property int initWidth
+    required property int initHeight
     // 最小宽高，按未缩放大小设置
-    property int refMinWidth: 0
-    property int refMinHeight: 0
-    // 宽高是否自适应，如果 =true 则根据 refWidth/Height 与 1920/1080 的比例来自适应窗口大小
+    property int minWidth: 0
+    property int minHeight: 0
+    // 宽高是否自适应，如果 =true 则根据 initWidth/Height 与 1920/1080 的比例来自适应窗口大小
     property bool autoSize: false
 
     // 可设置为 Window 或者 Dialog，不用每次都设置所有 flags 属性
@@ -239,15 +239,15 @@ Window {
         if (autoSize) {
             // 更宽则按照高度适应，更高则按照宽度适应
             if (screen.width / screen.height > 1920 / 1080) {
-                control.width = Math.floor(control.refWidth / 1080 * screen.height) + control.shadowWidth * 2
-                control.height = Math.floor(control.refHeight / 1080 * screen.height) + control.shadowWidth * 2
+                control.width = Math.floor(control.initWidth / 1080 * screen.height) + control.shadowWidth * 2
+                control.height = Math.floor(control.initHeight / 1080 * screen.height) + control.shadowWidth * 2
             } else {
-                control.width = Math.floor(control.refWidth / 1920 * screen.width) + control.shadowWidth * 2
-                control.height = Math.floor(control.refHeight / 1920 * screen.width) + control.shadowWidth * 2
+                control.width = Math.floor(control.initWidth / 1920 * screen.width) + control.shadowWidth * 2
+                control.height = Math.floor(control.initHeight / 1920 * screen.width) + control.shadowWidth * 2
             }
         } else {
-            control.width = qDpi(control.refWidth) + control.shadowWidth * 2
-            control.height = qDpi(control.refHeight) + control.shadowWidth * 2
+            control.width = qDpi(control.initWidth) + control.shadowWidth * 2
+            control.height = qDpi(control.initHeight) + control.shadowWidth * 2
         }
     }
 
