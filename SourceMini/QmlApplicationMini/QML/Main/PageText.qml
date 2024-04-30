@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import Cute.Component 1.0
 
 // 文本缩放
 Rectangle {
@@ -19,7 +20,7 @@ Rectangle {
             font.pixelSize: qDpi(14)
             font.family: "SimSun"
             text: String("14px(%1) 宋体").arg(font.pixelSize)
-            ItemTag { text: "2" }
+            ItemTag { index: 2; text: "qDpi 计算缩放" }
         }
         Text {
             font.pixelSize: qDpi(14)
@@ -63,7 +64,7 @@ Rectangle {
         MyText {
             refPixelSize: 16
             text: String("MyText %1px %2").arg(refPixelSize).arg(font.family)
-            ItemTag { text: "3" }
+            ItemTag { index: 3; text: "封装 Text" }
         }
         // 换行
         MyText {

@@ -3,6 +3,7 @@ QT += gui
 QT += widgets
 QT += quick
 QT += qml
+QT += svg
 QT += core-private
 QT += gui-private
 QT += quick-private
