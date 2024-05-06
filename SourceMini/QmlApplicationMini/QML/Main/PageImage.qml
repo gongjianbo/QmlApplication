@@ -52,7 +52,7 @@ Rectangle {
 
         BasicImageTool {
             id: img_tool
-            // source: my_img.refSource
+            // source: my_img.mySource
             // 浮点数
             devicePixelRatio: qDpiF(1)
         }

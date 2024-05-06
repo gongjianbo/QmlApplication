@@ -6,7 +6,7 @@
 /**
  * @brief 窗口工具类
  * @author 龚建波
- * @date 2024-04-28
+ * @date 2022-11-04
  * @details
  * 1.每个窗口对应一个 BasicWindowTool，以处理多屏不同设置的情况
  */

@@ -153,24 +153,24 @@ Item {
         tempGlobalPos = windowTool.pos();
         if (mtop) {
             calcRect.y = tempRect.y + tempGlobalPos.y + tempOffsetPos.y;
-            if(calcRect.y > tempRect.y + tempRect.height - qDpi(target.refMinHeight))
-                calcRect.y = tempRect.y + tempRect.height - qDpi(target.refMinHeight);
+            if(calcRect.y > tempRect.y + tempRect.height - qDpi(target.minHeight))
+                calcRect.y = tempRect.y + tempRect.height - qDpi(target.minHeight);
             calcRect.height = tempRect.y + tempRect.height - calcRect.y;
         } else if (mbottom) {
             calcRect.height = tempRect.height + tempGlobalPos.y + tempOffsetPos.y;
-            if(calcRect.height < qDpi(target.refMinHeight))
-                calcRect.height = qDpi(target.refMinHeight);
+            if(calcRect.height < qDpi(target.minHeight))
+                calcRect.height = qDpi(target.minHeight);
         }
 
         if (mleft) {
             calcRect.x = tempRect.x + tempGlobalPos.x + tempOffsetPos.x;
-            if(calcRect.x > tempRect.x + tempRect.width - qDpi(target.refMinWidth))
-                calcRect.x = tempRect.x + tempRect.width - qDpi(target.refMinWidth);
+            if(calcRect.x > tempRect.x + tempRect.width - qDpi(target.minWidth))
+                calcRect.x = tempRect.x + tempRect.width - qDpi(target.minWidth);
             calcRect.width = tempRect.x + tempRect.width - calcRect.x;
         } else if (mright) {
             calcRect.width = tempRect.width+tempGlobalPos.x + tempOffsetPos.x;
-            if (calcRect.width < qDpi(target.refMinWidth))
-                calcRect.width = qDpi(target.refMinWidth);
+            if (calcRect.width < qDpi(target.minWidth))
+                calcRect.width = qDpi(target.minWidth);
         }
         target.setGeometry(calcRect);
     }

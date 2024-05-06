@@ -5,7 +5,7 @@
 /**
  * @brief 获取图片的宽高、查找 x 倍大图
  * @author 龚建波
- * @date 2021-04-29
+ * @date 2024-04-29
  */
 class BasicImageTool : public QObject
 {
