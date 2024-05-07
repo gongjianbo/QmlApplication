@@ -16,13 +16,14 @@ Window {
     id: control
 
     visible: false
-    flags: framless
+    flags: (framless
            ? (windowType | Qt.FramelessWindowHint |
               Qt.WindowMinMaxButtonsHint |
               Qt.WindowCloseButtonHint |
               Qt.WindowSystemMenuHint)
-           : windowType
-    color: win_tool.enableTransparent() ? "transparent" : "black"
+           : windowType)
+    // NOTE 这里不能用表达式？
+    color: "transparent"
 
     // 宽高单独设置，按未缩放大小设置，因为切换缩放比
     required property int initWidth

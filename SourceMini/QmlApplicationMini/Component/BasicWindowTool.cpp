@@ -219,7 +219,6 @@ bool BasicWindowTool::eventFilter(QObject *watched, QEvent *event)
 
 void BasicWindowTool::classBegin()
 {
-    return;
     auto obj = parent();
     while (obj)
     {
