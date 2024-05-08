@@ -235,20 +235,42 @@ Window {
     }
 
     Component.onCompleted: {
-        // 初始化时根据 dpi 重置宽高，阴影额外加宽高
+        sizeAdaption()
+    }
+
+    // 窗口位置大小计算
+    function sizeAdaption(targetWindow = null) {
+        let w = control.width
+        let h = control.height
+        let s = targetWindow ? targetWindow.screen : control.screen
         if (autoSize) {
             // 更宽则按照高度适应，更高则按照宽度适应
-            if (screen.width / screen.height > 1920 / 1080) {
-                control.width = Math.floor(control.initWidth / 1080 * screen.height) + control.shadowWidth * 2
-                control.height = Math.floor(control.initHeight / 1080 * screen.height) + control.shadowWidth * 2
+            if (s.width / s.height > 1920 / 1080) {
+                w = Math.floor(control.initWidth / 1080 * s.height) + control.shadowWidth * 2
+                h = Math.floor(control.initHeight / 1080 * s.height) + control.shadowWidth * 2
             } else {
-                control.width = Math.floor(control.initWidth / 1920 * screen.width) + control.shadowWidth * 2
-                control.height = Math.floor(control.initHeight / 1920 * screen.width) + control.shadowWidth * 2
+                w = Math.floor(control.initWidth / 1920 * s.width) + control.shadowWidth * 2
+                h = Math.floor(control.initHeight / 1920 * s.width) + control.shadowWidth * 2
             }
         } else {
-            control.width = qDpi(control.initWidth) + control.shadowWidth * 2
-            control.height = qDpi(control.initHeight) + control.shadowWidth * 2
+            w = qDpi(control.initWidth) + control.shadowWidth * 2
+            h = qDpi(control.initHeight) + control.shadowWidth * 2
         }
+        if (w < qDpi(control.minWidth)) {
+            w = qDpi(control.minWidth)
+        }
+        if (h < qDpi(control.minHeight)) {
+            h = qDpi(control.minHeight)
+        }
+        if (w > s.width - qDpi(40)) {
+            w = s.width - qDpi(40)
+        }
+        if (h > s.height - qDpi(40)) {
+            h = s.height - qDpi(40)
+        }
+        control.width = w
+        control.height = h
+        control.moveToCenter(targetWindow)
     }
 
     // 重写show接口，去掉transientParent，让任务栏展示子窗口
