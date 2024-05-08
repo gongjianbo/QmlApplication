@@ -22,7 +22,6 @@ Window {
               Qt.WindowCloseButtonHint |
               Qt.WindowSystemMenuHint)
            : windowType)
-    // NOTE 这里不能用表达式？
     color: "transparent"
 
     // 宽高单独设置，按未缩放大小设置，因为切换缩放比

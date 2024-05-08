@@ -229,6 +229,9 @@ void BasicWindowTool::classBegin()
             // 但是因为属性还没初始化，create 后窗口默认按 120 初始化，导致 show 时没居中
             // 所以 show 时重置下 rect
             win->create();
+            // 提前调用了 create，导致颜色表达式绑定切换到 transparent 会呈黑色，值绑定则正常
+            // 在这里设置一次 color 后，恢复正常
+            win->setColor(Qt::transparent);
             setWindow(win);
             break;
         }
