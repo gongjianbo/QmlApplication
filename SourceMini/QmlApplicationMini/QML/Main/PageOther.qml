@@ -5,6 +5,8 @@ import QtQuick.Templates 2.15 as T
 import QtQuick.Layouts 1.15
 import Cute.Component 1.0
 
+import "../Component"
+
 // 其他缩放
 Rectangle {
     id: top
@@ -41,8 +43,17 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
+                popup.open()
                 console.log("rect", parent.x, parent.y, parent.width, parent.height)
             }
         }
+    }
+
+    BasicPopup {
+        id: popup
+        anchors.centerIn: Overlay.overlay
+        width: qDpi(200)
+        height: qDpi(200)
+        modal: true
     }
 }

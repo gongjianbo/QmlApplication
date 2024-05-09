@@ -246,7 +246,9 @@ void BasicWindowTool::componentComplete()
     }
     frameless = !!(window->flags() & Qt::FramelessWindowHint);
     // classBegin 设置 transparent 会导致初始化被阻塞时渲染异常，所以放到 componentComplete 进行
-    window->setColor(Qt::transparent);
+    if (frameless) {
+        window->setColor(Qt::transparent);
+    }
     // auto obj = parent();
     // while (obj)
     // {

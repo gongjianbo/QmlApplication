@@ -10,5 +10,6 @@
         <file>Main/PageImage.qml</file>
         <file>Main/PageOther.qml</file>
         <file>Main/ItemTag.qml</file>
+        <file>Component/BasicPopup.qml</file>
     </qresource>
 </RCC>

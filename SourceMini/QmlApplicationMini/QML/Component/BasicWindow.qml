@@ -11,6 +11,7 @@ import Cute.Component 1.0
 // NOTE 注意 BasicWindow 的 initWidth/Height 不要加 qDpi 后设置
 // NOTE 最小宽高通过 minWidth/Height 而不是 minimumWidth/Height
 // NOTE 因为是套了一层，设置背景色不能用 color，需要设置 bgColor
+// NOTE 如果是自定义边框，Popup 或者 Dialog 的模态阴影需要加上 shadowWidth 和 headerHeight 的 margin
 // TODO 触碰屏幕边框时的停靠效果需要调用 win32 接口，待完成
 Window {
     id: control
@@ -49,6 +50,8 @@ Window {
     property alias windowTool: win_tool
     // 标题栏
     property alias header: win_title
+    // 标题栏高度
+    property alias headerHeight: win_title.height
     // 标题栏按钮可见性
     property int headerFlags: (windowType === Qt.Window)
                               ? (Qt.WindowMinimizeButtonHint |
@@ -111,7 +114,7 @@ Window {
             id: win_title
             visible: control.framless
             width: parent.width
-            height: qDpi(36)
+            height: control.framless ? qDpi(36) : 0
             radius: control.radius
             color: "darkCyan"
 
