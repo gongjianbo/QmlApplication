@@ -10,6 +10,7 @@ import Cute.Component 1.0
 // 龚建波 2024-01-02
 // NOTE 注意 BasicWindow 的 initWidth/Height 不要加 qDpi 后设置
 // NOTE 最小宽高通过 minWidth/Height 而不是 minimumWidth/Height
+// NOTE 根据内容适应宽高设置 initWidth/Height = 0，此时根据内容的第一个元素来计算宽高
 // NOTE 因为是套了一层，设置背景色不能用 color，需要设置 bgColor
 // NOTE 如果是自定义边框，Popup 或者 Dialog 的模态阴影需要加上 shadowWidth 和 headerHeight 的 margin
 // TODO 触碰屏幕边框时的停靠效果需要调用 win32 接口，待完成
@@ -25,10 +26,11 @@ Window {
            : windowType)
     color: "transparent"
 
-    // 宽高单独设置，按未缩放大小设置，因为切换缩放比
+    // 窗口初始宽高单独设置，按未缩放大小设置（不用 qDpi）
+    // 如果需要根据内容计算宽高则 initWidth/Height 设置为 0（不适用于 autoSize）
     required property int initWidth
     required property int initHeight
-    // 最小宽高，按未缩放大小设置
+    // 窗口最小宽高，按未缩放大小设置（不用 qDpi）
     property int minWidth: 0
     property int minHeight: 0
     // 宽高是否自适应，如果 =true 则根据 initWidth/Height 与 1920/1080 的比例来自适应窗口大小
@@ -256,8 +258,17 @@ Window {
                 h = Math.floor(control.initHeight / 1920 * s.width) + control.shadowWidth * 2
             }
         } else {
-            w = qDpi(control.initWidth) + control.shadowWidth * 2
-            h = qDpi(control.initHeight) + control.shadowWidth * 2
+            // initWidth/Height = 0 则根据内容计算宽高
+            if (control.initWidth > 0) {
+                w = qDpi(control.initWidth) + control.shadowWidth * 2
+            } else {
+                w = win_content.children[0].width + control.shadowWidth * 2
+            }
+            if (control.initHeight > 0) {
+                h = qDpi(control.initHeight) + control.shadowWidth * 2
+            } else {
+                h = control.headerHeight + win_content.children[0].height + control.shadowWidth * 2
+            }
         }
         if (w < qDpi(control.minWidth)) {
             w = qDpi(control.minWidth)
