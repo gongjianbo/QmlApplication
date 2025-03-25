@@ -95,7 +95,7 @@ void BasicWindowTool::showMin()
     // 如果 win 也在这里 setFlag 仍然会有 bug
     ::ShowWindow((HWND)window->winId(), SW_SHOWMINIMIZED);
 #elif defined(Q_OS_MACOS)
-    // framless 时 macos 不能最小化
+    // frameless 时 macos 不能最小化
     window->setFlag(Qt::FramelessWindowHint, false);
     window->showMinimized();
 #else

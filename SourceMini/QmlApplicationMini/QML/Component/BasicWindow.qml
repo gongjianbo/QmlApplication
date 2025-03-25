@@ -18,13 +18,14 @@ Window {
     id: control
 
     visible: false
-    flags: (framless
+    flags: (frameless
            ? (windowType | Qt.FramelessWindowHint |
               Qt.WindowMinMaxButtonsHint |
               Qt.WindowCloseButtonHint |
               Qt.WindowSystemMenuHint)
            : windowType)
     color: "transparent"
+    transientParent: null
 
     // 窗口初始宽高单独设置，按未缩放大小设置（不用 qDpi）
     // 如果需要根据内容计算宽高则 initWidth/Height 设置为 0（不适用于 autoSize）
@@ -39,15 +40,15 @@ Window {
     // 可设置为 Window 或者 Dialog，不用每次都设置所有 flags 属性
     property int windowType: Qt.Window
     // 无边框
-    property bool framless: true
+    property bool frameless: true
     // Window 默认可拉伸，Dialog 默认不可以
     property bool resizable: (windowType === Qt.Window)
     // 当前是否最大化
     property bool isMax: (visibility === Window.Maximized || visibility === Window.FullScreen)
     // 阴影宽度
-    property int shadowWidth: (!framless || isMax) ? 0 : (win_tool.enableTransparent() ? 12 : 1)
+    property int shadowWidth: (!frameless || isMax) ? 0 : (win_tool.enableTransparent() ? 12 : 1)
     // 自定义边框的圆角
-    property int radius: 0 // (!framless || isMax) ? 0 : 8
+    property int radius: 0 // (!frameless || isMax) ? 0 : 8
     // 自定义边框相关接口
     property alias windowTool: win_tool
     // 标题栏
@@ -80,7 +81,7 @@ Window {
     // 底部作阴影
     Rectangle {
         id: win_background
-        visible: control.framless && win_tool.enableTransparent()
+        visible: control.frameless
         anchors.fill: win_foreground
         // 阴影小 1px，防止明显的黑边
         anchors.margins: 1
@@ -107,16 +108,16 @@ Window {
         Rectangle {
             id: win_content
             anchors.fill: parent
-            anchors.topMargin: control.framless ? win_title.height : 0
+            anchors.topMargin: control.frameless ? win_title.height : 0
             color: "white"
         }
 
         // 标题栏
         Rectangle {
             id: win_title
-            visible: control.framless
+            visible: control.frameless
             width: parent.width
-            height: control.framless ? qDpi(36) : 0
+            height: control.frameless ? qDpi(36) : 0
             radius: control.radius
             color: "darkCyan"
 
@@ -199,7 +200,7 @@ Window {
         // 无边框窗口拉伸，放到title之上
         WindowResize {
             id: win_resize
-            visible: control.framless && control.resizable
+            visible: control.frameless && control.resizable
             anchors.fill: parent
             windowTool: win_tool
         }
@@ -295,14 +296,15 @@ Window {
         if (control.visible) {
             control.raise()
             control.requestActivate()
-            win_tool.showNormal()
-            return
+            // win_tool.showNormal()
+            // return
         }
         // 如果需要所有窗口在任务栏都是独立的，要去掉 transientParent
         if (control.transientParent) {
             control.transientParent = null
         }
-        moveToCenter()
+        sizeAdaption()
+        // moveToCenter()
         win_tool.showNormal()
     }
 

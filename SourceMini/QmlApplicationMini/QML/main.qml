@@ -7,12 +7,18 @@ import "./Main"
 Item {
     id: root
 
-    Component.onCompleted: {
-        let main_window = window_manager.getMainWindow()
-        main_window.show()
-    }
+    // 不动态创建会先显示一下默认的窗口
+    // MainWindow {
+    //     id: main_window
+    //     visible: true
+    // }
 
     WindowManager {
         id: window_manager
+    }
+
+    Component.onCompleted: {
+        let main_window = window_manager.getMainWindow()
+        main_window.show()
     }
 }
