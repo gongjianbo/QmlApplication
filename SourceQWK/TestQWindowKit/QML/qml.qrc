@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Component/BasicWindow.qml</file>
+        <file>Component/close.svg</file>
+        <file>Component/max.svg</file>
+        <file>Component/min.svg</file>
+        <file>Component/normal.svg</file>
+    </qresource>
+</RCC>
