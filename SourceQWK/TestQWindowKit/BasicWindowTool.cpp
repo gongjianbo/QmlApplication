@@ -74,12 +74,12 @@ void BasicWindowTool::initWindow(int initWidth, int initHeight, bool sizeAdaptiv
     qreal ratio = screenDevicePixelRatio(screen);
     if (sizeAdaptive) {
         // 更宽则按照高度适应，更高则按照宽度适应
-        if (area.width() / area.height() > 1920 / 1080) {
-            width = std::floor(initWidth / 1080 * area.height());
-            height = std::floor(initHeight / 1080 * area.height());
+        if (area.width() / area.height() > 1920.0 / 1080.0) {
+            width = std::floor(initWidth / 1080.0 * area.height());
+            height = std::floor(initHeight / 1080.0 * area.height());
         } else {
-            width = std::floor(initWidth / 1920 * area.width());
-            height = std::floor(initHeight / 1920 * area.width());
+            width = std::floor(initWidth / 1920.0 * area.width());
+            height = std::floor(initHeight / 1920.0 * area.width());
         }
     } else {
         // TODO initWidth/Height = 0 则根据内容计算宽高

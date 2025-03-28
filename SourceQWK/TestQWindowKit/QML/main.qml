@@ -96,7 +96,7 @@ BasicWindow {
             initVisible: false
             initWidth: 500
             initHeight: 400
-            // modality: Qt.ApplicationModal
+            sizeAdaptive: true
             onClosing: {
                 winMax.destroy()
                 winMax = null
